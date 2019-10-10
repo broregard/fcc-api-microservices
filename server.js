@@ -2,11 +2,10 @@ const express = require("express");
 const app = express();
 
 app.use(express.static("public"));
-app.get("/", function(request, response) {
+app.get(("/api/timestamp/:date?"), (req,res) => getTheTime(req, res, req.params.dateString));
+app.get("*", function(request, response) {
   response.sendFile(__dirname + "/views/index.html");
 });
-
-app.get(("/api/timestamp/:date?"), (req,res) => getTheTime(req, res, req.params.dateString));
 
 const getTheTime = (req, res, dateString) => {
   const date = dateString ? !isNaN(dateString) ? new Date(parseInt(dateString)) : new Date(dateString) : new Date();
