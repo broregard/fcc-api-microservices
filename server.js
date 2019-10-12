@@ -6,7 +6,10 @@ const urlEncodedParser = bodyParser.urlencoded({extended: false});
 const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
 const urlExists = require("url-exists");
+const multer = require("multer");
 const app = express();
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 app.use(express.static("public"));
 app.use(urlEncodedParser);
@@ -56,10 +59,13 @@ app.post("/api/exercise/new-user", (req, res) => postExerciseUser(req, res));
 app.post("/api/exercise/add", (req, res) => postExercise(req, res));
 app.get("/api/exercise/log", (req, res) => getExercise(req, res));
 
+app.get("/api/fileinfo", (req, res) => res.sendFile(__dirname + "/views/fileinfo.html"));
+app.post("/api/fileinfo", upload.single('upfile'), (req, res) => postFile(req, res));
 
 app.get("*", function(req, res) {
   res.sendFile(__dirname + "/views/index.html");
 });
+
 
 
 /////////////////////////////////////////////////////////////////////
@@ -151,6 +157,11 @@ const findExercises = (username, from = 0, to = Date.now(), limit = 0, done) =>
       done(null, exercises)
     }
   });
+
+
+/////////////////////////////////////////////////////////////////////
+// Fileinfo API funcs
+const postFile = (req, res) => res.json({name: req.file.originalname, type: req.file.mimetype, size: req.file.size});
 
 
 
