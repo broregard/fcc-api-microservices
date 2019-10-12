@@ -80,7 +80,7 @@ const getWhoAmI = (req, res, ipaddress = req['x-forwarded-for'].split(",")[0], l
 
 /////////////////////////////////////////////////////////////////////
 // URL Shortner API funcs
-const postShortUrl = (req, res) => {
+const postShortUrl = (req, res) =>
   createAndSaveUrl(req.body.url, (err, url) => {
     if (err && err._message != "Url validation failed") res.json(err);
     else {
@@ -89,15 +89,13 @@ const postShortUrl = (req, res) => {
       });
     }
   });
-}
 
-const getShortUrl = (req, res) => {
+const getShortUrl = (req, res) =>
   findUrl({index: req.params.index}, (err, url) => {
     res.redirect(url.url);
   });
-}
 
-const createAndSaveUrl = (url, done) => {
+const createAndSaveUrl = (url, done) => 
   Url.countDocuments({}).exec((err, count) => {
     let newUrl = new Url({url: scrubUrl(url), index: count});
     urlExists(newUrl.url, (err, exists) => {
@@ -105,7 +103,6 @@ const createAndSaveUrl = (url, done) => {
       else done({error: "invalid URL"});
     });
   });
-}
 
 const scrubUrl = (url, regex = /(http(s)*:\/\/)*(www([^\.])*\.)*/) => url.match(regex) ? "http://" + url.slice(url.match(regex)[0].length) : url;
 
