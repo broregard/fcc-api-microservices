@@ -72,7 +72,6 @@ const getTimestamp = (req, res, dateString = req.params.date) => {
 }
 
 
-
 /////////////////////////////////////////////////////////////////////
 // Header API funcs
 const getWhoAmI = (req, res, ipaddress = req['x-forwarded-for'].split(",")[0], language = req["accept-language"], software = req["user-agent"]) =>
@@ -81,7 +80,6 @@ const getWhoAmI = (req, res, ipaddress = req['x-forwarded-for'].split(",")[0], l
 
 /////////////////////////////////////////////////////////////////////
 // URL Shortner API funcs
-//
 const postShortUrl = (req, res) => {
   createAndSaveUrl(req.body.url, (err, url) => {
     if (err && err._message != "Url validation failed") res.json(err);
@@ -112,7 +110,6 @@ const createAndSaveUrl = (url, done) => {
 const scrubUrl = (url, regex = /(http(s)*:\/\/)*(www([^\.])*\.)*/) => url.match(regex) ? "http://" + url.slice(url.match(regex)[0].length) : url;
 
 const findUrl = (query, done) => Url.findOne(query, (err, url) => err ? done(err) : done(null, url));
-
 
 
 /////////////////////////////////////////////////////////////////////
@@ -158,10 +155,9 @@ const findExercises = (username, from = 0, to = Date.now(), limit = 0, done) =>
     }
   });
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
 
 
+/////////////////////////////////////////////////////////////////////
 // Start server
 const listener = app.listen(process.env.PORT, function() {
   console.log("Listening on port " + listener.address().port);
